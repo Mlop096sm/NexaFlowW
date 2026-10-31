@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %> - <%= siteName %></title>
+    <link rel="icon" href="/favicon.svg">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+    <!-- 悬浮客服按钮 -->
+    <a href="https://www.douyin.com/user/MS4wLjABAAAAbbLRGm4LaeuXMm-r8Ydd8vuC28n6g695p_NWfv2dJQ4?from_tab_name=main"
+       target="_blank" class="floating-cs" title="点击联系客服">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 2C6.48 2 2 6.48 2 12v4.5c0 1.93 1.57 3.5 3.5 3.5h1c.55 0 1-.45 1-1v-5c0-.55-.45-1-1-1H5.5c-.28 0-.5-.22-.5-.5V12c0-3.86 3.14-7 7-7s7 3.14 7 7v.5c0 .28-.22.5-.5.5H17c-.55 0-1 .45-1 1v5c0 .55.45 1 1 1h1.5c1.93 0 3.5-1.57 3.5-3.5V12c0-5.52-4.48-10-10-10zm-7 12h1v4H5c-.83 0-1.5-.67-1.5-1.5v-1c0-.83.67-1.5 1.5-1.5zm14 4h-1v-4h1c.83 0 1.5.67 1.5 1.5v1c0 .83-.67 1.5-1.5 1.5z"/>
+        </svg>
+        <span>找客服</span>
+    </a>
+
+    <!-- 导航栏 -->
+    <header>
+        <div class="nav-container">
+            <div class="logo-area">
+                <div class="logo-img">邺山</div>
+                <a class="logo-text" href="/">邺山村新闻中心</a>
+            </div>
+            <form class="search-area" action="/news" method="get">
+                <input type="text" name="q" class="search-input" placeholder="搜索新闻、公告、财务..." value="<%= typeof kw !== 'undefined' && kw ? kw : '' %>">
+                <button class="search-btn" type="submit">搜索</button>
+            </form>
+            <nav>
+                <ul>
+                    <li><a href="/" class="<%= active === 'home' ? 'active' : '' %>">首页</a></li>
+                    <li><a href="/news" class="<%= active === 'news' ? 'active' : '' %>">新闻中心</a></li>
+                    <li><a href="/revitalize" class="<%= active === 'revitalize' ? 'active' : '' %>">乡村振兴</a></li>
+                    <li><a href="/village" class="<%= active === 'village' ? 'active' : '' %>">村情简介</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>

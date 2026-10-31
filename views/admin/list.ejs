@@ -1,0 +1,83 @@
+<%- include('../partials/header', { title, active: '' }) %>
+
+<div class="container">
+
+    <div class="admin-top">
+        <h2>新闻管理</h2>
+        <div class="admin-actions">
+            <span class="who">管理员：<%= adminUser %></span>
+            <a href="/admin/new" class="btn btn-primary">＋ 新增新闻</a>
+            <a href="/admin/logout" class="btn btn-plain">退出登录</a>
+        </div>
+    </div>
+
+    <!-- 分类筛选 -->
+    <div class="filter-bar" style="margin-bottom:16px;">
+        <a href="/admin" class="<%= !cat ? 'active' : '' %>">全部（<%= counts.reduce(function(s,c){return s+c.c;},0) %>）</a>
+        <% Object.keys(categories).forEach(function(c){ %>
+        <%
+          var cnt = 0;
+          counts.forEach(function(x){ if (x.category === c) cnt = x.c; });
+        %>
+        <a href="/admin?cat=<%= c %>" class="<%= cat === c ? 'active' : '' %>"><%= categories[c] %>（<%= cnt %>）</a>
+        <% }) %>
+    </div>
+
+    <div class="admin-table-wrap">
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>标题</th>
+                    <th>分类</th>
+                    <th>来源</th>
+                    <th>发布时间</th>
+                    <th>状态</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% list.forEach(function(n){ %>
+                <tr>
+                    <td><%= n.id %></td>
+                    <td class="title-cell"><%= n.title %></td>
+                    <td><%= catName(n.category) %></td>
+                    <td><%= n.source %></td>
+                    <td><%= n.publish_date %></td>
+                    <td>
+                        <% if (n.is_top) { %><span class="badge">置顶</span><% } %>
+                        <% if (n.is_secret) { %><span class="badge danger">绝密</span><% } %>
+                        <% if (!n.is_top && !n.is_secret) { %><span class="badge">正常</span><% } %>
+                    </td>
+                    <td class="row-actions">
+                        <a href="/news/<%= n.id %>" class="btn btn-plain btn-sm" target="_blank">预览</a>
+                        <a href="/admin/edit/<%= n.id %>" class="btn btn-primary btn-sm">编辑</a>
+                        <% if (!n.is_secret) { %>
+                        <form method="post" action="/admin/toggle/<%= n.id %>" style="display:inline;">
+                            <input type="hidden" name="_token" value="<%= csrfToken %>">
+                            <input type="hidden" name="field" value="is_top">
+                            <button type="submit" class="btn btn-plain btn-sm"><%= n.is_top ? '取消置顶' : '置顶' %></button>
+                        </form>
+                        <% } %>
+                        <form method="post" action="/admin/toggle/<%= n.id %>" style="display:inline;">
+                            <input type="hidden" name="_token" value="<%= csrfToken %>">
+                            <input type="hidden" name="field" value="is_secret">
+                            <button type="submit" class="btn btn-plain btn-sm"><%= n.is_secret ? '移出绝密' : '设为绝密' %></button>
+                        </form>
+                        <form method="post" action="/admin/delete/<%= n.id %>" style="display:inline;" class="confirm-form">
+                            <input type="hidden" name="_token" value="<%= csrfToken %>">
+                            <button type="submit" class="btn btn-danger btn-sm">删除</button>
+                        </form>
+                    </td>
+                </tr>
+                <% }) %>
+                <% if (!list.length) { %>
+                <tr><td colspan="7" style="text-align:center; color:#999; padding:30px;">暂无数据</td></tr>
+                <% } %>
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+<%- include('../partials/footer') %>

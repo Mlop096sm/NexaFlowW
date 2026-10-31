@@ -1,0 +1,127 @@
+<%- include('partials/header', { title, active }) %>
+
+<!-- 顶部Banner -->
+<section class="hero">
+    <h1>邺山村新闻中心</h1>
+    <p>聚焦村务动态，关注教育民生，传递乡村声音，共建和谐邺山。</p>
+</section>
+
+<!-- 主要内容区 -->
+<div class="container">
+    <div class="news-grid">
+
+        <!-- 左侧新闻主列表 -->
+        <div class="main-news" id="mainNewsList">
+
+            <% tops.forEach(function(n){ %>
+            <div class="headline-card clickable" data-id="<%= n.id %>">
+                <span class="news-tag">置顶头条</span>
+                <h3><%= n.title %></h3>
+                <p><%= n.summary %></p>
+                <div class="news-meta">
+                    <span>来源：<%= n.source %></span>
+                    <span>发布时间：<%= n.publish_date %></span>
+                </div>
+            </div>
+            <% }) %>
+
+            <% others.forEach(function(n){ %>
+            <div class="news-item clickable" data-id="<%= n.id %>">
+                <h3><%= n.title %></h3>
+                <p><%= n.summary %></p>
+                <div class="news-meta">
+                    <span>来源：<%= n.source %></span>
+                    <span>发布时间：<%= n.publish_date %></span>
+                </div>
+            </div>
+            <% }) %>
+
+        </div>
+
+        <!-- 右侧边栏 -->
+        <div class="sidebar" id="sidebarArea">
+
+            <div class="sidebar-card">
+                <h3>村情档案</h3>
+                <ul class="sidebar-list">
+                    <li><span>地理位置：</span><span style="color:#555; text-align:right;">浙西省汀州市<br>浙皖交界山区</span></li>
+                    <li><span>行政类别：</span><span style="color:#555;">行政村</span></li>
+                    <li><span>常住人口：</span><span style="color:#555;">约 1,260 人<span class="demo-note">示例</span></span></li>
+                    <li><span>村域面积：</span><span style="color:#555;">约 12.6 km²<span class="demo-note">示例</span></span></li>
+                    <li><span>村委书记：</span><span style="color:#555;">李建国</span></li>
+                    <li><span>村委主任：</span><span style="color:#555;">王大山</span></li>
+                    <li><span>村委会计：</span><span style="color:#555;">赵秀兰</span></li>
+                </ul>
+            </div>
+
+            <div class="sidebar-card">
+                <h3>村务公开栏</h3>
+                <ul class="sidebar-list">
+                    <% sidebarLatest.forEach(function(n){ %>
+                    <li class="clickable-side" data-id="<%= n.id %>">
+                        <a href="javascript:void(0)" onclick="event.stopPropagation(); openModal('<%= n.id %>'); return false;"><%= n.title %></a>
+                        <span class="sidebar-date"><%= n.publish_date %></span>
+                    </li>
+                    <% }) %>
+                </ul>
+            </div>
+
+            <% if (missingCase) { %>
+            <div class="sidebar-card clickable" style="border-top-color: #ff4d4f;" data-id="<%= missingCase.id %>">
+                <h3>历史待查事件</h3>
+                <div class="notice-box" style="margin-top: 0;">
+                    <p><%= missingCase.summary %></p>
+                    <div class="notice-time">通报时间：<%= missingCase.publish_date %></div>
+                </div>
+            </div>
+            <% } %>
+
+        </div>
+
+    </div>
+
+    <!-- 机密档案区块 -->
+    <div class="secret-archive">
+        <h3>绝密档案区</h3>
+
+        <div class="lock-screen" id="lockScreen">
+            <div class="lock-icon">🔐</div>
+            <p>此区域包含绝密文件，仅限授权人员访问。</p>
+            <button class="unlock-btn" onclick="unlockArchive()">输入密码解锁</button>
+        </div>
+
+        <div class="secret-content" id="secretContent">
+            <p class="highlight" style="font-size: 18px; margin-bottom: 20px;">✔ 验证通过，档案已解密。</p>
+
+            <% secrets.forEach(function(n, i){ %>
+            <% if (i > 0) { %><hr class="secret-divider"><% } %>
+            <div class="secret-block clickable" data-id="<%= n.id %>">
+                <h4><%= n.title %></h4>
+                <p><%= n.summary %></p>
+            </div>
+            <% }) %>
+        </div>
+    </div>
+
+</div>
+
+<!-- 详情弹窗模态框 -->
+<div class="modal-overlay" id="newsModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2 class="modal-title" id="modalTitle">新闻标题</h2>
+            <div class="modal-meta" id="modalMeta">发布时间：XXXX-XX-XX</div>
+        </div>
+        <div class="modal-body" id="modalBody">
+            <!-- 内容由 JS 动态注入 -->
+        </div>
+        <button class="modal-close-btn" onclick="closeModal()">返回列表</button>
+    </div>
+</div>
+
+<%- include('partials/footer') %>
+
+<script>
+    // 弹窗数据（由服务端渲染，内容已转义，杜绝 XSS）
+    window.NEWS_DATA = <%- JSON.stringify(modalData).replace(/</g, '\\u003c') %>;
+</script>

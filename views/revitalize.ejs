@@ -1,0 +1,59 @@
+<%- include('partials/header', { title, active }) %>
+
+<div class="container">
+
+    <div class="rz-hero">
+        <h2>乡村振兴</h2>
+        <p>产业兴旺、生态宜居、乡风文明、治理有效、生活富裕——邺山村正沿着乡村振兴之路稳步前行，让绿水青山真正成为金山银山。</p>
+    </div>
+
+    <!-- 五大振兴 -->
+    <div class="rz-grid">
+        <div class="rz-card">
+            <h4>产业振兴</h4>
+            <p>以茶叶、竹木为主导产业，发展“茶叶+”农旅融合，村集体经济持续壮大。</p>
+        </div>
+        <div class="rz-card">
+            <h4>人才振兴</h4>
+            <p>回引返乡创业人才，培育新型职业农民，让乡土人才成为发展引擎。</p>
+        </div>
+        <div class="rz-card">
+            <h4>文化振兴</h4>
+            <p>农家书屋、村史馆、文化礼堂焕新升级，乡风文明蔚然成风。</p>
+        </div>
+        <div class="rz-card">
+            <h4>生态振兴</h4>
+            <p>推行茶园生态管护与人居环境整治，守住浙皖交界山区的绿水青山。</p>
+        </div>
+        <div class="rz-card">
+            <h4>组织振兴</h4>
+            <p>村两委班子带头，村民议事会、村务公开机制不断完善。</p>
+        </div>
+    </div>
+
+    <!-- 乡村振兴动态 -->
+    <div class="page-head">
+        <h2>振兴动态</h2>
+        <span class="total">共 <%= list.length %> 条</span>
+    </div>
+
+    <div class="main-news">
+        <% if (list.length) { %>
+            <% list.forEach(function(n){ %>
+            <a href="/news/<%= n.id %>" class="news-item" style="text-decoration:none; display:flex; flex-direction:column;">
+                <h3><%= n.title %></h3>
+                <p><%= n.summary %></p>
+                <div class="news-meta">
+                    <span>来源：<%= n.source %></span>
+                    <span>发布时间：<%= n.publish_date %></span>
+                </div>
+            </a>
+            <% }) %>
+        <% } else { %>
+            <div class="no-results">暂无乡村振兴相关新闻。</div>
+        <% } %>
+    </div>
+
+</div>
+
+<%- include('partials/footer') %>

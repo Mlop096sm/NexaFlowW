@@ -1,0 +1,970 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>邺山村新闻中心 - 邺山村学习网</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%234a8c4a'/%3E%3Ctext x='32' y='43' font-size='34' text-anchor='middle' fill='%23fff' font-family='Microsoft YaHei, sans-serif'%3E邺%3C/text%3E%3C/svg%3E">
+    <style>
+        /* CSS 变量定义主题色 */
+        :root {
+            --primary-green: #4a8c4a;
+            --light-green: #7bb87b;
+            --water-blue: #a4d1e2;
+            --dark-blue: #1a2a3a;
+            --text-color: #333333;
+            --bg-color: #f4f7f6;
+            --card-bg: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Microsoft YaHei', 'PingFang SC', sans-serif;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        /* 导航栏 */
+        header {
+            background-color: #ffffff;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            min-width: 0;
+        }
+
+        .logo-img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--light-green) 0%, var(--primary-green) 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-weight: bold;
+            font-size: 12px;
+            border: 2px solid var(--water-blue);
+        }
+
+        .logo-text {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--primary-green);
+            letter-spacing: 2px;
+        }
+
+        /* 搜索框样式 */
+        .search-area {
+            display: flex;
+            gap: 10px;
+        }
+
+        .search-input {
+            padding: 8px 15px;
+            border: 1px solid #ccc;
+            border-radius: 20px;
+            outline: none;
+            font-size: 16px;
+            width: 200px;
+            transition: all 0.3s;
+        }
+
+        .search-input:focus {
+            border-color: var(--primary-green);
+            box-shadow: 0 0 5px rgba(74, 140, 74, 0.3);
+        }
+
+        .search-btn {
+            background-color: var(--primary-green);
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.3s;
+        }
+
+        .search-btn:hover {
+            background-color: #386c38;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 30px;
+            align-items: center;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: var(--text-color);
+            font-weight: 500;
+            transition: color 0.3s;
+            cursor: pointer;
+        }
+
+        nav a:hover, nav a.active {
+            color: var(--primary-green);
+        }
+
+        /* 顶部Banner */
+        .hero {
+            background: linear-gradient(rgba(255,255,255,0.85), rgba(255,255,255,0.85)), url('https://media.doubao.com/space/api/box/stream/download/all_by_mount_point/AQP3bBOWxoF4RexR8cBcdmq0nxb') center/cover;
+            padding: 70px 20px;
+            text-align: center;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .hero h1 {
+            font-size: 42px;
+            color: var(--primary-green);
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        .hero p {
+            font-size: 18px;
+            color: #555;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* 主要内容区 */
+        .container {
+            max-width: 1200px;
+            margin: 50px auto;
+            padding: 0 20px;
+        }
+
+        .section-title {
+            font-size: 28px;
+            color: var(--primary-green);
+            margin-bottom: 30px;
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .section-title::before {
+            content: '';
+            display: inline-block;
+            width: 6px;
+            height: 24px;
+            background-color: var(--primary-green);
+            margin-right: 12px;
+            border-radius: 3px;
+        }
+
+        /* 新闻列表布局 */
+        .news-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 30px;
+            align-items: start;
+        }
+
+        .main-news {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            min-width: 0;
+        }
+
+        /* 卡片通用样式 (增加可点击的交互) */
+        .clickable {
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .clickable:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+
+        /* 置顶大头条卡片 */
+        .headline-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            border-top: 4px solid #ff4d4f;
+        }
+
+        .news-tag {
+            display: inline-block;
+            background-color: #ff4d4f;
+            color: white;
+            font-size: 13px;
+            padding: 4px 12px;
+            border-radius: 4px;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        .headline-card h3 {
+            font-size: 24px;
+            color: var(--primary-green);
+            margin-bottom: 15px;
+        }
+
+        .headline-card p {
+            color: #555;
+            margin-bottom: 20px;
+            font-size: 16px;
+            text-align: justify;
+            /* 截断长文本，模拟摘要 */
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        /* 普通新闻卡片 */
+        .news-item {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+            display: flex;
+            flex-direction: column;
+            border-left: 4px solid var(--light-green);
+        }
+
+        .news-item h3 {
+            font-size: 20px;
+            color: var(--primary-green);
+            margin-bottom: 12px;
+        }
+
+        .news-item p {
+            color: #666;
+            margin-bottom: 15px;
+            font-size: 15px;
+            text-align: justify;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .news-meta {
+            font-size: 14px;
+            color: #888;
+            display: flex;
+            justify-content: space-between;
+            border-top: 1px dashed #eee;
+            padding-top: 12px;
+            margin-top: auto;
+        }
+
+        /* 搜索无结果提示 */
+        #noResults {
+            display: none;
+            text-align: center;
+            padding: 50px 20px;
+            background: white;
+            border-radius: 12px;
+            color: #888;
+            font-size: 18px;
+            grid-column: 1 / -1;
+        }
+
+        /* 右侧边栏 */
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            position: sticky;
+            top: 100px;
+            min-width: 0;
+        }
+
+        .sidebar-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            border-top: 4px solid var(--water-blue);
+        }
+
+        .sidebar-card h3 {
+            color: var(--primary-green);
+            font-size: 20px;
+            margin-bottom: 15px;
+            border-bottom: 2px dashed #e0e0e0;
+            padding-bottom: 10px;
+        }
+
+        .sidebar-list { list-style: none; }
+
+        .sidebar-list li {
+            padding: 12px 0;
+            border-bottom: 1px solid #f0f0f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 15px;
+            min-width: 0;
+        }
+
+        .sidebar-list li:last-child { border-bottom: none; }
+
+        .sidebar-list a {
+            color: var(--text-color);
+            text-decoration: none;
+            transition: color 0.3s;
+            max-width: 70%;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .sidebar-list a:hover { color: var(--primary-green); }
+
+        .sidebar-date { color: #999; font-size: 13px; }
+
+        /* 警告框 */
+        .notice-box {
+            background-color: #fff5f5;
+            border-left: 4px solid #ff4d4f;
+            padding: 15px;
+            margin-top: 15px;
+            border-radius: 4px;
+        }
+
+        .notice-box p {
+            color: #cc0000;
+            font-weight: 600;
+            margin-bottom: 5px;
+            font-size: 15px;
+            text-align: justify;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .notice-time { text-align: right; color: #888; font-size: 13px; }
+
+        .censored {
+            background-color: #333;
+            color: #333;
+            border-radius: 2px;
+            padding: 0 4px;
+            user-select: none;
+            display: inline-block;
+            vertical-align: middle;
+            line-height: 1.2;
+        }
+
+        /* 机密档案区 */
+        .secret-archive {
+            background: #1a1a1a;
+            color: #e0e0e0;
+            border-radius: 12px;
+            padding: 30px;
+            margin-top: 50px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            border: 2px dashed #555;
+        }
+
+        .secret-archive h3 {
+            color: #ff4d4f;
+            font-size: 24px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid #333;
+            padding-bottom: 10px;
+        }
+
+        .secret-archive h3::before { content: '🔒'; margin-right: 10px; }
+
+        .lock-screen { text-align: center; padding: 40px 20px; }
+        .lock-icon { font-size: 48px; margin-bottom: 15px; }
+        .lock-screen p { color: #aaa; margin-bottom: 20px; }
+
+        .unlock-btn {
+            background-color: #ff4d4f;
+            color: white;
+            border: none;
+            padding: 10px 30px;
+            font-size: 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.3s;
+            font-weight: bold;
+        }
+        .unlock-btn:hover { background-color: #cc0000; }
+
+        .secret-content {
+            display: none;
+            animation: fadeIn 0.8s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .secret-content h4 {
+            color: #ffeb3b;
+            margin: 20px 0 10px 0;
+            font-size: 18px;
+        }
+
+        .secret-content p {
+            font-size: 15px;
+            line-height: 1.8;
+            margin-bottom: 10px;
+            color: #ccc;
+        }
+
+        .secret-content .highlight { color: #ff4d4f; font-weight: bold; }
+
+        .secret-divider { border: 0; height: 1px; background: #333; margin: 20px 0; }
+
+        /* ======================= */
+        /* 详情弹窗样式 */
+        /* ======================= */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            backdrop-filter: blur(3px);
+        }
+
+        .modal-content {
+            background: #fff;
+            max-width: 800px;
+            width: 100%;
+            max-height: 85vh;
+            border-radius: 12px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            overflow-y: auto;
+            position: relative;
+            animation: slideDown 0.3s ease-out;
+        }
+
+        @keyframes slideDown {
+            from { transform: translateY(-30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .modal-header {
+            border-bottom: 2px solid var(--primary-green);
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 20px;
+        }
+
+        .modal-title {
+            font-size: 26px;
+            color: var(--primary-green);
+            font-weight: bold;
+            margin: 0;
+        }
+
+        .modal-meta {
+            font-size: 14px;
+            color: #888;
+            white-space: nowrap;
+            padding-top: 8px;
+        }
+
+        .modal-body {
+            font-size: 16px;
+            line-height: 1.8;
+            color: #333;
+            text-align: justify;
+        }
+
+        .modal-body p { margin-bottom: 15px; }
+
+        .modal-close-btn {
+            display: inline-block;
+            margin-top: 30px;
+            background-color: var(--primary-green);
+            color: white;
+            padding: 10px 25px;
+            border-radius: 6px;
+            border: none;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .modal-close-btn:hover { background-color: #386c38; }
+
+        /* 轻提示 Toast */
+        #toast {
+            position: fixed;
+            left: 50%;
+            bottom: 90px;
+            transform: translateX(-50%) translateY(20px);
+            background: rgba(26,42,58,0.92);
+            color: #fff;
+            padding: 10px 22px;
+            border-radius: 8px;
+            font-size: 14px;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s ease;
+            z-index: 1200;
+            max-width: 80vw;
+            text-align: center;
+        }
+
+        #toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* 页脚 */
+        footer {
+            background-color: var(--dark-blue);
+            color: #a0b0c0;
+            text-align: center;
+            padding: 40px 20px;
+            margin-top: 80px;
+        }
+
+        /* 悬浮客服 */
+        .floating-cs {
+            position: fixed;
+            right: 30px; bottom: 80px;
+            background-color: #ff4d4f;
+            color: white;
+            width: 70px; height: 70px;
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-decoration: none;
+            box-shadow: 0 4px 15px rgba(255, 77, 79, 0.4);
+            z-index: 999;
+            transition: all 0.3s ease;
+            animation: float 3s ease-in-out infinite;
+        }
+        .floating-cs:hover { background-color: #ff7875; transform: scale(1.1); }
+        .floating-cs svg { width: 28px; height: 28px; fill: currentColor; margin-bottom: 2px; }
+        .floating-cs span { font-size: 13px; font-weight: bold; }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
+            100% { transform: translateY(0px); }
+        }
+
+        /* 响应式 */
+        @media (max-width: 992px) {
+            .news-grid { grid-template-columns: minmax(0, 1fr); }
+            .sidebar { position: static; }
+        }
+
+        @media (max-width: 768px) {
+            .nav-container { flex-direction: column; }
+            nav ul { flex-wrap: wrap; justify-content: center; gap: 15px; }
+            .search-area { width: 100%; justify-content: center; margin-top: 10px; }
+            .search-input { width: 70%; }
+            .hero h1 { font-size: 32px; }
+            .floating-cs { right: 15px; bottom: 50px; width: 60px; height: 60px; }
+            .floating-cs svg { width: 24px; height: 24px; }
+            .floating-cs span { font-size: 12px; }
+            .modal-content { padding: 25px; }
+            .modal-title { font-size: 20px; }
+            .modal-meta { white-space: normal; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 悬浮客服按钮 -->
+    <a href="https://www.douyin.com/user/MS4wLjABAAAAbbLRGm4LaeuXMm-r8Ydd8vuC28n6g695p_NWfv2dJQ4?from_tab_name=main"
+       target="_blank" class="floating-cs" title="点击联系客服">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 2C6.48 2 2 6.48 2 12v4.5c0 1.93 1.57 3.5 3.5 3.5h1c.55 0 1-.45 1-1v-5c0-.55-.45-1-1-1H5.5c-.28 0-.5-.22-.5-.5V12c0-3.86 3.14-7 7-7s7 3.14 7 7v.5c0 .28-.22.5-.5.5H17c-.55 0-1 .45-1 1v5c0 .55.45 1 1 1h1.5c1.93 0 3.5-1.57 3.5-3.5V12c0-5.52-4.48-10-10-10zm-7 12h1v4H5c-.83 0-1.5-.67-1.5-1.5v-1c0-.83.67-1.5 1.5-1.5zm14 4h-1v-4h1c.83 0 1.5.67 1.5 1.5v1c0 .83-.67 1.5-1.5 1.5z"/>
+        </svg>
+        <span>找客服</span>
+    </a>
+
+    <!-- 导航栏 -->
+    <header>
+        <div class="nav-container">
+            <div class="logo-area">
+                <div class="logo-img">邺山</div>
+                <div class="logo-text">邺山村新闻中心</div>
+            </div>
+            <!-- 搜索框 -->
+            <div class="search-area">
+                <input type="text" id="searchInput" class="search-input" placeholder="搜索新闻、公告、财务..." onkeypress="handleKeyPress(event)">
+                <button class="search-btn" onclick="performSearch()">搜索</button>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="#" class="active">首页</a></li>
+                    <li><a href="#">新闻中心</a></li>
+                    <li><a href="#">乡村振兴</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- 顶部Banner -->
+    <section class="hero">
+        <h1>邺山村新闻中心</h1>
+        <p>聚焦村务动态，关注教育民生，传递乡村声音，共建和谐邺山。</p>
+    </section>
+
+    <!-- 主要内容区 -->
+    <div class="container">
+        <div class="news-grid">
+
+            <!-- 左侧新闻主列表 -->
+            <div class="main-news" id="mainNewsList">
+
+                <!-- 新闻卡片：晚自习 -->
+                <div class="headline-card clickable" data-id="news1">
+                    <span class="news-tag">置顶头条</span>
+                    <h3>正式取消晚自习，减少学生压力</h3>
+                    <p>为进一步贯彻落实“双减”政策，保障青少年身心健康发展，经邺山村教育局研究决定，自即日起，全村中小学正式取消强制晚自习，将课余时间还给学生与家庭。此举旨在减轻学生课业负担，得到了广大学生及家长的一致好评。</p>
+                    <div class="news-meta">
+                        <span>来源：邺山村教育局</span>
+                        <span>发布时间：2019年11月11日</span>
+                    </div>
+                </div>
+
+                <!-- 新闻卡片：跑操 -->
+                <div class="headline-card clickable" data-id="news2">
+                    <span class="news-tag">置顶头条</span>
+                    <h3>学校取消跑操，为学生减负</h3>
+                    <p>为切实减轻学生课业与体能负担，保障学生充足睡眠与休息时间，邺山村教育局发布通知，即日起全面取消辖区内各中小学的强制早操及跑操活动，鼓励学生根据自身情况参与体育锻炼。</p>
+                    <div class="news-meta">
+                        <span>来源：邺山村教育局</span>
+                        <span>发布时间：2023年12月11日</span>
+                    </div>
+                </div>
+
+                <!-- 新闻卡片：失踪案 -->
+                <div class="news-item clickable" data-id="news3">
+                    <h3>警方通报：村民陈宇在后山失踪，调查仍在进行中</h3>
+                    <p>在早些时候，警方通报，陈宇在后山失踪，但警方未找到陈宇。浙江政府走访后可能与当地传说<span class="censored">██</span>爷有关。目前，相关调查仍在进行中，请广大村民注意出行安全，切勿独自进入未开发区域。</p>
+                    <div class="news-meta">
+                        <span>来源：综合新闻</span>
+                        <span>发布时间：2020年11月12日</span>
+                    </div>
+                </div>
+
+                <!-- 新闻卡片：村务动态 -->
+                <div class="news-item clickable" data-id="news4">
+                    <h3>邺山村2025年度财政收支预算公开</h3>
+                    <p>根据村务公开制度，现将邺山村2025年度财务收支预算进行公示。2025年度预计总收入约 122.7 亿元（含茶叶、竹木及上级拨款）；预计总支出约 876 万元（用于道路硬化与小学修缮）。详细报表请前往村委会公告栏查阅。</p>
+                    <div class="news-meta">
+                        <span>来源：邺山村村委会</span>
+                        <span>发布时间：2025年1月5日</span>
+                    </div>
+                </div>
+
+                <!-- 搜索无结果提示 -->
+                <div id="noResults">未找到相关新闻内容。</div>
+
+            </div>
+
+            <!-- 右侧边栏 -->
+            <div class="sidebar" id="sidebarArea">
+
+                <div class="sidebar-card">
+                    <h3>村情档案</h3>
+                    <ul class="sidebar-list">
+                        <li><span>地理位置：</span><span style="color:#555; text-align:right;">浙西省汀州市<br>浙皖交界山区</span></li>
+                        <li><span>行政类别：</span><span style="color:#555;">行政村</span></li>
+                        <li><span>村委书记：</span><span style="color:#555;">李建国</span></li>
+                        <li><span>村委主任：</span><span style="color:#555;">王大山</span></li>
+                        <li><span>村委会计：</span><span style="color:#555;">赵秀兰</span></li>
+                    </ul>
+                </div>
+
+                <div class="sidebar-card">
+                    <h3>村务公开栏</h3>
+                    <ul class="sidebar-list">
+                        <li class="clickable-side" data-id="news1">
+                            <a href="javascript:void(0)" onclick="event.stopPropagation(); openModal('news1'); return false;">关于正式取消全村中小学晚自习的通知</a>
+                            <span class="sidebar-date">2019-11-11</span>
+                        </li>
+                        <li class="clickable-side" data-id="news2">
+                            <a href="javascript:void(0)" onclick="event.stopPropagation(); openModal('news2'); return false;">关于全面取消中小学强制跑操活动的通知</a>
+                            <span class="sidebar-date">2023-12-11</span>
+                        </li>
+                        <li class="clickable-side" data-id="news5">
+                            <a href="javascript:void(0)" onclick="event.stopPropagation(); openModal('news5'); return false;">关于2024年秋季学期小学招生入学工作的通知</a>
+                            <span class="sidebar-date">2024-05-20</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="sidebar-card clickable" style="border-top-color: #ff4d4f;" data-id="news3">
+                    <h3>历史待查事件</h3>
+                    <div class="notice-box" style="margin-top: 0;">
+                        <p>【失踪案件通报】在早些时候，警方通报，陈宇在后山失踪，但警方未找到陈宇。可能与当地传说<span class="censored">██</span>爷有关。</p>
+                        <div class="notice-time">通报时间：2020年11月12日</div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- 机密档案区块 -->
+        <div class="secret-archive">
+            <h3>绝密档案区</h3>
+
+            <div class="lock-screen" id="lockScreen">
+                <div class="lock-icon">🔐</div>
+                <p>此区域包含绝密文件，仅限授权人员访问。</p>
+                <button class="unlock-btn" onclick="unlockArchive()">输入密码解锁</button>
+            </div>
+
+            <div class="secret-content" id="secretContent">
+                <p class="highlight" style="font-size: 18px; margin-bottom: 20px;">✔ 验证通过，档案已解密。</p>
+
+                <!-- 点击可查看详情 -->
+                <div class="clickable" style="padding: 10px; border-radius: 8px;" data-id="secret1" onmouseover="this.style.background='#333'" onmouseout="this.style.background='transparent'">
+                    <h4>【内部调查通报】陈宇失踪案补充材料</h4>
+                    <p>在早些时候，警方通报，陈宇在后山失踪，但警方未找到陈宇。可能与当地传说<span class="censored">██</span>爷有关。</p>
+                    <p class="highlight">本地居民证实疑似被献祭。</p>
+                    <p>绝密：日期保密</p>
+                </div>
+
+                <hr class="secret-divider">
+
+                <div class="clickable" style="padding: 10px; border-radius: 8px;" data-id="secret2" onmouseover="this.style.background='#333'" onmouseout="this.style.background='transparent'">
+                    <h4>【村务财务审查】2025年度收支明细</h4>
+                    <p>根据村务公开制度，现将邺山村2025年度财务收支预算进行公示。2025年度预计总收入约 122.7 亿元（含茶叶、竹木及上级拨款）；预计总支出约 876 万元（用于道路硬化与小学修缮）。详细报表请前往村委会公告栏查阅。</p>
+                    <p>补充说明：<span class="highlight">76%资金来自茶叶</span>。</p>
+                    <p>基础：2025年1月5日</p>
+                </div>
+
+                <hr class="secret-divider">
+
+                <div class="clickable" style="padding: 10px; border-radius: 8px;" data-id="secret3" onmouseover="this.style.background='#333'" onmouseout="this.style.background='transparent'">
+                    <h4>【商业调查】村内餐饮业态</h4>
+                    <p>本地蜜雪冰城非常火爆。</p>
+                    <p>基础：2020年11月4日</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- 详情弹窗模态框 -->
+    <div class="modal-overlay" id="newsModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="modalTitle">新闻标题</h2>
+                <div class="modal-meta" id="modalMeta">发布时间：XXXX-XX-XX</div>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- 内容由 JS 动态注入 -->
+            </div>
+            <button class="modal-close-btn" onclick="closeModal()">返回列表</button>
+        </div>
+    </div>
+
+    <!-- 轻提示 Toast -->
+    <div id="toast"></div>
+
+    <!-- 页脚 -->
+    <footer>
+        <p>© 2024 邺山村新闻中心 版权所有 | 助力乡村振兴，共建学习型乡村</p>
+        <p style="margin-top: 10px; color: #7f8c8d; font-size: 13px;">
+            主办单位：邺山村村委会 | 技术支持：邺山村教育信息中心
+        </p>
+    </footer>
+
+    <!-- ======================= -->
+    <!-- JavaScript 逻辑区 -->
+    <!-- ======================= -->
+    <script>
+        // 1. 新闻数据库 (包含了截图中的档案内容)
+        const newsData = {
+            "news1": {
+                title: "正式取消晚自习，减少学生压力",
+                meta: "来源：邺山村教育局 | 发布时间：2019年11月11日",
+                content: "<p>为进一步贯彻落实“双减”政策，保障青少年身心健康发展，经邺山村教育局研究决定，自即日起，全村中小学正式取消强制晚自习，将课余时间还给学生与家庭。</p><p>此举旨在减轻学生课业负担，得到了广大学生及家长的一致好评。各学校将根据实际情况，合理布置课后作业，确保学生在校内学足学好，课后有充足的休息和自主发展时间。</p>"
+            },
+            "news2": {
+                title: "学校取消跑操，为学生减负",
+                meta: "来源：邺山村教育局 | 发布时间：2023年12月11日",
+                content: "<p>为切实减轻学生课业与体能负担，保障学生充足睡眠与休息时间，邺山村教育局发布通知，即日起全面取消辖区内各中小学的强制早操及跑操活动。</p><p>通知指出，各校应因地制宜，鼓励学生根据自身情况，在课间或体育课上参与适宜的体育锻炼。这一举措旨在引导学生养成自觉锻炼的习惯，而非强制性的形式主义。</p>"
+            },
+            "news3": {
+                title: "警方通报：村民陈宇在后山失踪，调查仍在进行中",
+                meta: "来源：综合新闻 | 发布时间：2020年11月12日",
+                content: "<p>在早些时候，警方通报，陈宇在后山失踪，但警方未找到陈宇。浙江政府走访后可能与当地传说<span class='censored'>██</span>爷有关。</p><p>目前，相关调查仍在进行中。当地政府呼吁广大村民注意出行安全，切勿独自深入未开发的林区与后山地带。如有相关线索，请及时与村委会或警方联系。</p>"
+            },
+            "news4": {
+                title: "邺山村2025年度财政收支预算公开",
+                meta: "来源：邺山村村委会 | 发布时间：2025年1月5日",
+                content: "<p>根据村务公开制度，现将邺山村2025年度财务收支预算进行公示。</p><p>2025年度预计总收入约 122.7 亿元（含茶叶、竹木及上级拨款）；预计总支出约 876 万元（用于道路硬化与小学修缮）。详细报表请前往村委会公告栏查阅。</p>"
+            },
+            "news5": {
+                title: "关于2024年秋季学期小学招生入学工作的通知",
+                meta: "来源：邺山村教育局 | 发布时间：2024年5月20日",
+                content: "<p>根据上级教育部门统一部署，现将2024年秋季学期邺山村小学招生入学工作安排通知如下。</p><p>请各位适龄儿童家长携带户口本、预防接种证等相关材料，于指定时间前往邺山村小学办理报名登记手续。具体时间与学区划分请关注后续详细公告。</p>"
+            },
+            "secret1": {
+                title: "【绝密】陈宇失踪案补充材料",
+                meta: "来源：内部调查 | 绝密：日期保密",
+                content: "<p>在早些时候，警方通报，陈宇在后山失踪，但警方未找到陈宇。可能与当地传说<span class='censored'>██</span>爷有关。</p><p style='color:#cc0000; font-weight:bold;'>本地居民证实疑似被献祭。</p>"
+            },
+            "secret2": {
+                title: "【绝密】2025年度收支明细审查",
+                meta: "来源：村务财务审查 | 基础：2025年1月5日",
+                content: "<p>根据村务公开制度，现将邺山村2025年度财务收支预算进行公示。2025年度预计总收入约 122.7 亿元（含茶叶、竹木及上级拨款）；预计总支出约 876 万元（用于道路硬化与小学修缮）。详细报表请前往村委会公告栏查阅。</p><p style='color:#ff4d4f; font-weight:bold;'>76%资金来自茶叶。</p>"
+            },
+            "secret3": {
+                title: "【绝密】村内餐饮业态调查",
+                meta: "来源：商业调查 | 基础：2020年11月4日",
+                content: "<p>本地蜜雪冰城非常火爆。</p>"
+            }
+        };
+
+        // 2. 弹窗相关逻辑
+        const modalOverlay = document.getElementById('newsModal');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalMeta = document.getElementById('modalMeta');
+        const modalBody = document.getElementById('modalBody');
+
+        // 打开弹窗
+        function openModal(id) {
+            const data = newsData[id];
+            if (!data) return;
+            modalTitle.textContent = data.title;
+            modalMeta.textContent = data.meta;
+            modalBody.innerHTML = data.content;
+            modalOverlay.style.display = 'flex';
+            document.body.style.overflow = 'hidden'; // 锁住背景滚动
+        }
+
+        // 关闭弹窗
+        function closeModal() {
+            modalOverlay.style.display = 'none';
+            document.body.style.overflow = '';
+        }
+
+        // 点击遮罩空白处关闭
+        modalOverlay.addEventListener('click', function (e) {
+            if (e.target === modalOverlay) closeModal();
+        });
+
+        // 按 Esc 关闭
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') closeModal();
+        });
+
+        // 3. 所有可点击的新闻卡片 / 侧边栏条目 / 机密档案 → 打开详情
+        document.querySelectorAll('.clickable, .clickable-side').forEach(function (el) {
+            el.addEventListener('click', function () {
+                const id = el.getAttribute('data-id');
+                if (id && newsData[id]) openModal(id);
+            });
+        });
+
+        // 4. 机密档案解锁
+        const ARCHIVE_PASSWORD = 'ysdhancun';
+
+        function unlockArchive() {
+            const input = window.prompt('请输入绝密档案访问密码：');
+            if (input === null) return; // 用户点击了取消
+            if (input.trim() === ARCHIVE_PASSWORD) {
+                document.getElementById('lockScreen').style.display = 'none';
+                document.getElementById('secretContent').style.display = 'block';
+                showToast('验证通过，档案已解密');
+            } else {
+                showToast('密码错误，无法访问机密档案');
+            }
+        }
+
+        // 5. 搜索逻辑
+        function performSearch() {
+            const keyword = document.getElementById('searchInput').value.trim().toLowerCase();
+            const cards = document.querySelectorAll('#mainNewsList > .clickable');
+            let found = 0;
+            cards.forEach(function (card) {
+                if (!keyword || card.textContent.toLowerCase().indexOf(keyword) !== -1) {
+                    card.style.display = '';
+                    found++;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+            document.getElementById('noResults').style.display = found === 0 ? 'block' : 'none';
+        }
+
+        // 搜索框回车触发
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                performSearch();
+            }
+        }
+
+        // 6. 顶部导航占位反馈（避免死链接）
+        document.querySelectorAll('nav a').forEach(function (link) {
+            link.addEventListener('click', function (e) {
+                e.preventDefault();
+                showToast('「' + link.textContent.trim() + '」模块为演示页面，敬请期待');
+            });
+        });
+
+        // 轻提示 Toast
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            toast.textContent = msg;
+            toast.classList.add('show');
+            clearTimeout(toast._timer);
+            toast._timer = setTimeout(function () {
+                toast.classList.remove('show');
+            }, 2200);
+        }
+    </script>
+</body>
+</html>

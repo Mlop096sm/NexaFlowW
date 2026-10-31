@@ -1,0 +1,36 @@
+<%- include('partials/header', { title, active }) %>
+
+<div class="container detail-wrap">
+
+    <div class="breadcrumb">
+        <a href="/">首页</a> / <a href="/news">新闻中心</a> / <a href="/news?cat=<%= item.category %>"><%= catName(item.category) %></a> / <%= item.title %>
+    </div>
+
+    <article class="detail-card">
+        <h1><%= item.title %></h1>
+        <div class="detail-meta">
+            <span>分类：<%= catName(item.category) %></span>
+            <span>来源：<%= item.source %></span>
+            <span>发布时间：<%= item.publish_date %></span>
+        </div>
+        <div class="detail-body">
+            <% paragraphs(item.content).forEach(function(p){ %><p><%= p %></p><% }) %>
+        </div>
+    </article>
+
+    <% if (related.length) { %>
+    <div class="related">
+        <h3>相关新闻</h3>
+        <ul>
+            <% related.forEach(function(r){ %>
+            <li><a href="/news/<%= r.id %>"><%= r.title %></a><span style="float:right; color:#999; font-size:13px;"><%= r.publish_date %></span></li>
+            <% }) %>
+        </ul>
+    </div>
+    <% } %>
+
+    <div class="back-link"><a href="/news">← 返回新闻中心</a></div>
+
+</div>
+
+<%- include('partials/footer') %>

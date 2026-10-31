@@ -1,0 +1,65 @@
+<%- include('partials/header', { title, active, kw }) %>
+
+<div class="container">
+
+    <div class="page-head">
+        <h2>新闻中心</h2>
+        <span class="total">共 <%= total %> 条<%= cat ? '（分类：' + catName(cat) + '）' : '' %><%= kw ? '（关键词：' + kw + '）' : '' %></span>
+    </div>
+
+    <!-- 分类筛选 -->
+    <div class="filter-bar">
+        <a href="/news<%= kw ? '?q=' + encodeURIComponent(kw) : '' %>" class="<%= !cat ? 'active' : '' %>">全部</a>
+        <% Object.keys(categories).forEach(function(c){ %>
+        <a href="/news?cat=<%= c %><%= kw ? '&q=' + encodeURIComponent(kw) : '' %>" class="<%= cat === c ? 'active' : '' %>"><%= categories[c] %></a>
+        <% }) %>
+    </div>
+
+    <!-- 页内搜索 -->
+    <form class="search-area page-search" action="/news" method="get">
+        <% if (cat) { %><input type="hidden" name="cat" value="<%= cat %>"><% } %>
+        <input type="text" name="q" class="search-input" placeholder="搜索新闻、公告、财务..." value="<%= kw %>">
+        <button class="search-btn" type="submit">搜索</button>
+    </form>
+
+    <!-- 新闻列表 -->
+    <div class="main-news" id="mainNewsList">
+        <% if (list.length) { %>
+            <% list.forEach(function(n){ %>
+            <a href="/news/<%= n.id %>" class="<%= n.is_top ? 'headline-card' : 'news-item' %>" style="text-decoration:none; display:flex; flex-direction:column;">
+                <% if (n.is_top) { %><span class="news-tag">置顶头条</span><% } %>
+                <h3><%= n.title %></h3>
+                <p><%= n.summary %></p>
+                <div class="news-meta">
+                    <span>来源：<%= n.source %></span>
+                    <span>发布时间：<%= n.publish_date %></span>
+                </div>
+            </a>
+            <% }) %>
+        <% } else { %>
+            <div class="no-results">未找到相关新闻内容。</div>
+        <% } %>
+    </div>
+
+    <!-- 分页 -->
+    <% if (pages > 1) { %>
+    <div class="pagination">
+        <% if (page > 1) { %>
+        <a href="/news?<%= cat ? 'cat=' + cat + '&' : '' %><%= kw ? 'q=' + encodeURIComponent(kw) + '&' : '' %>page=<%= page - 1 %>">上一页</a>
+        <% } %>
+        <% for (var i = 1; i <= pages; i++) { %>
+            <% if (i === page) { %>
+            <span class="current"><%= i %></span>
+            <% } else { %>
+            <a href="/news?<%= cat ? 'cat=' + cat + '&' : '' %><%= kw ? 'q=' + encodeURIComponent(kw) + '&' : '' %>page=<%= i %>"><%= i %></a>
+            <% } %>
+        <% } %>
+        <% if (page < pages) { %>
+        <a href="/news?<%= cat ? 'cat=' + cat + '&' : '' %><%= kw ? 'q=' + encodeURIComponent(kw) + '&' : '' %>page=<%= page + 1 %>">下一页</a>
+        <% } %>
+    </div>
+    <% } %>
+
+</div>
+
+<%- include('partials/footer') %>
